@@ -12,6 +12,8 @@ Welcome to the official documentation for the **MAC 5000 Searle Generator**. Thi
 - [Schematics] see files)
 - [Assembly Guide](see files)
 - [Pricing & Parts List](see files)
+- 
+https://github.com/jedisecX/MAC5000-Searle-Generator/tree/schematics
 
 For the latest updates, check out our [GitHub Repository](https://github.com/JediSecX/MAC5000-Searle-Generator).
 
