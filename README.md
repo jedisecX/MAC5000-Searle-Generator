@@ -9,9 +9,9 @@ Welcome to the official documentation for the **MAC 5000 Searle Generator**. Thi
 - **Components:** Magnetic rollers, flywheel, motor-assisted startup
 
 ## **Documentation**
-- [Schematics](./schematics)
-- [Assembly Guide](./assembly)
-- [Pricing & Parts List](./files)
+- [Schematics] see files)
+- [Assembly Guide](see files)
+- [Pricing & Parts List](see files)
 
 For the latest updates, check out our [GitHub Repository](https://github.com/JediSecX/MAC5000-Searle-Generator).
 
