@@ -1,0 +1,10 @@
+Parameter,Value
+Calculated RMS Voltage (Before Adjustment),222.14466637756573
+Required Coil Turns for 240V AC,216.0
+Required Coil Turns for 120V AC,108.0
+Required Coil Turns for 12V DC,11.0
+Estimated Current at 240V AC (A),4.17
+Estimated Current at 120V AC (A),8.33
+Estimated Current at 12V DC (A),83.33
+Required RPM for 240V Output,3241.0
+Required RPM for 120V Output,1621.0
