@@ -6,7 +6,7 @@ Welcome to the official documentation for the **MAC 5000 Searle Generator**. Thi
 - **AC Outputs:** 120V & 240V
 - **DC Output:** 12V
 - **Core Technology:** Searl Effect-inspired energy conversion
-- **Components:** Magnetic rollers, flywheel, motor-assisted startup
+- **Components:** Magnetic rollers (ball bearings), flywheel, motor-assisted startup
 
 ## **Documentation**
 - [Schematics] see files)
