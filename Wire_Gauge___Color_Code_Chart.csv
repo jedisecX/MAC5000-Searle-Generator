@@ -1,0 +1,13 @@
+Connection,Recommended Wire Gauge,Wire Color Code
+Main Power Input → Rectifier,10 AWG (High Current),Red (Live)
+Rectifier → Voltage Regulator,12 AWG (Power Line),Black (GND)
+Voltage Regulator → Signal Controller,14 AWG (Control Signal),Yellow (Control)
+Voltage Regulator → Capacitors,16 AWG (Voltage Regulation),Blue (Regulated Power)
+Capacitors → Inductor,14 AWG (Inductor Connection),Green (Inductor Path)
+Inductor → Signal Controller,14 AWG (Power Signal),Yellow (Signal)
+Signal Controller → LCD Display,18 AWG (Low Power LCD),Orange (LCD Power)
+Power Switch → Signal Controller,16 AWG (Switch Signal),White (Switch Control)
+Emergency Stop → Signal Controller,16 AWG (Safety Circuit),Gray (Emergency Stop)
+Signal Controller → 120V AC Output,10 AWG (High Power),Red (120V Line)
+Signal Controller → 240V AC Output,10 AWG (High Power),Blue (240V Line)
+Signal Controller → 12V DC Output,12 AWG (Low Voltage DC),Purple (12V DC)
