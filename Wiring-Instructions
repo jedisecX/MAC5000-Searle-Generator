@@ -1,0 +1,398 @@
+---
+
+1) Design Targets & Power Budget
+
+AC Outputs
+
+120 V AC (x2 receptacles), target 15 A each (NEMA 5‑15R), independent breakers.
+
+240 V AC (x1 receptacle), target 20 A (NEMA 6‑20R), dedicated breaker.
+
+
+DC Output
+
+12 V DC accessory port, up to 20–30 A peak with resettable protection.
+
+
+Control & Aux
+
+MCU/logic 5–12 V (<1 A), RPM sensor, LCD panel, servo brake actuator, relay coils, status LEDs.
+
+
+
+> Adjust final ratings after measured load tests; up‑rate wiring if continuous duty >80% of breaker rating.
+
+
+
+
+---
+
+2) Wire Gauge, Color Code, and Insulation
+
+2.1 Recommended AWG (based on current & typical run lengths)
+
+120 V AC branch (15 A): 14 AWG THHN/THWN or MTW; 105 °C insulation; stranded.
+
+120 V AC branch (20 A option): 12 AWG.
+
+240 V AC 20 A branch: 12 AWG (hot/hot + ground).
+
+Main AC bus between inverter/alt and breakers (≤30 A): 10 AWG.
+
+12 V DC high‑current (≤30 A, ≤2 m run): 10–12 AWG (use 10 AWG if voltage drop must be <3%).
+
+12 V DC aux (≤10 A): 14–16 AWG.
+
+Signal/logic: 20–22 AWG twisted pairs for sensors; shielded where near magnets.
+
+
+> For long runs (>2 m) or higher ambient temps, step one gauge heavier. All high‑motion areas use fine‑strand automotive TXL/GXL.
+
+
+
+2.2 Color Code (internal standard)
+
+AC HOT (L): Black (L1), Red (L2).
+
+AC NEUTRAL (N): White.
+
+AC GROUND (PE): Green/Green‑Yellow stripe.
+
+12 V +: Red.
+
+12 V − / Chassis return: Black.
+
+Logic 5 V: Orange.
+
+Signals (sensors): Blue (data), Yellow (clk), Violet (aux).
+
+Brake/servo control: Gray.
+
+E‑Stop loop: Pink (distinct for quick tracing).
+
+
+2.3 Insulation & Looming
+
+Use PET braided sleeving with tinned copper braid over AC bundles near the magnetic core for EMI.
+
+Heat‑shrink at exits; adhesive‑lined in high‑vibration areas.
+
+Strain relief: P‑clips or cushioned clamps every 200 mm.
+
+
+
+---
+
+3) Connector Strategy
+
+AC panel: Faston 0.250″ or ring lugs on stud terminals; torque per datasheet.
+
+DC high current: Anderson SB50 or XT60/XT90 (enclosed), keyed to avoid cross‑mate.
+
+Low‑voltage harness: Molex Mini‑Fit Jr/JST‑VH for 5–10 A; JST‑XH for sensors.
+
+Serviceability: Each sub‑assembly (control panel, brake module, LCD, sensor pod) is quick‑disconnect.
+
+
+
+---
+
+4) Harness Topology (Star Ground & Segregation)
+
+Star ground to a single bonded chassis point (M6 stud with serrated washers; conductive coating or scraped paint).
+
+Segregate: AC power left side; DC power right side; signal in center tray, crossing power at 90° only.
+
+Add ferrite beads (clip‑on) on LCD and RPM lines near the core.
+
+
+[AC Gen/Inv]──(Main AC Bus 10 AWG)──>[Breakers]->(120V R1)  
+                                   └─>[Breakers]->(120V R2)  
+                                   └─>[Breaker]->(240V R)   
+
+[12V Source]->(Main 12V Fuse)->[DC Bus]->(LCD, MCU, Sensors, Servo, 12V Port)
+                                  |                         |
+                                  └──(Latching Relay Coil)  └──(Resettable 12V Port Breaker)
+
+All returns -> Star Ground (PE) -> Chassis
+
+
+---
+
+5) Protection & Safety Chain
+
+Line protection: Thermal‑magnetic breakers at each outlet; main AC bus fused if upstream source > branch rating.
+
+DC: Master ANL/Mega fuse near 12 V source (e.g., 40–60 A as calculated), plus branch fuses/breakers.
+
+E‑Stop: Latching, mushroom switch (twist‑to‑reset) in a series loop that:
+
+1. Drops the excitation/drive via the latching power relay (de‑energize to open).
+
+
+2. Commands servo brake to engage (fail‑safe spring return if power lost).
+
+
+3. Signals MCU to log fault and show red LCD alarm.
+
+
+
+12 V port: Resettable breaker + polarity protection (Schottky/MOSFET ORing) + TVS diode.
+
+Surge/EMI: MOVs across AC lines; RC snubbers across relay contacts; common‑mode choke on 12 V input to logic.
+
+
+
+---
+
+6) Control Logic (Panel)
+
+Front‑panel devices (left→right):
+
+1. ON/OFF Toggle (logic enable).
+
+
+2. START (momentary) – energize drive/coil start up to ramp RPM.
+
+
+3. SERVO BRAKE KNOB (pot) – analog setpoint to MCU for braking force.
+
+
+4. E‑STOP – latching mushroom.
+
+
+5. 12 V RESET – manual reset for 12 V port breaker/switch.
+
+
+6. LCD Panel – V/Hz/RPM/alarms.
+
+
+
+Functional sequence:
+
+Power‑on: Toggle ON → MCU boots → self‑test → LCD green.
+
+Start: Hold START → drive enables softly (slew‑rate limited) → release at target idle RPM.
+
+Brake: Rotate knob → MCU maps setpoint to servo torque/position; closed‑loop w/ RPM feedback.
+
+E‑Stop: Immediate coil drop, servo to full brake, LCD red, event log.
+
+
+Latching Relay Wiring (excitation/drive cut):
+
+Coil powered through E‑Stop loop and MCU OK line (series). Loss of either opens main drive feed.
+
+Manual RESET on panel re‑arms after fault clear.
+
+
+
+---
+
+7) Detailed Harness Breakouts
+
+7.1 AC Branch Harness
+
+Main AC bus (10 AWG) from alternator/inverter output to 3‑pole breaker bank.
+
+Branches:
+
+120 V R1: 14 AWG hot/neutral/ground to NEMA 5‑15R; breaker 15 A.
+
+120 V R2: 14 AWG as above; breaker 15 A.
+
+240 V R: 12 AWG L1/L2/PE to NEMA 6‑20R; breaker 20 A.
+
+
+
+7.2 DC & Logic Harness
+
+Battery/12 V source → ANL 50 A → DC bus bar (covered).
+
+Branches:
+
+12 V Port: 10–12 AWG → resettable 30 A breaker → socket.
+
+Servo Actuator: 16 AWG pair + shield → PWM driver.
+
+MCU/LCD/Sensors: 20–22 AWG twisted; 5 V reg local; ground to star.
+
+Latching Relay Coil: 18–20 AWG via E‑Stop loop + MCU OK.
+
+
+
+7.3 Sensor Pod
+
+RPM: Hall sensor + magnet flag on flywheel; twisted 22 AWG; pull‑up at MCU.
+
+Temp (core, bearings): NTC or digital (1‑Wire) on shielded pairs.
+
+V/Hz: Divider + isolated front‑end for AC measurement; respect creepage/clearance.
+
+
+
+---
+
+8) Mechanical Integration
+
+8.1 Servo‑Actuated Magnetic Brake Lever
+
+Purpose: Apply opposing magnetic polarity to the mercury‑attached (or equivalent) magnetic rings to brake/attenuate torque.
+
+Mechanism: Lever arm on rotary servo (metal‑gear, 25–35 kg·cm) drives a non‑magnetic linkage (G10/FR4 or 316 SS hardware) to a flux‑shunt blade positioned near the core.
+
+Fail‑safe: Spring‑return to "brake" when power is lost (or inverse, per test preference). Select spring constant to reach full travel within <150 ms.
+
+Stops: Soft silicone bumpers; mechanical hard‑stops to prevent over‑travel.
+
+Shielding: Mu‑metal/permalloy shield around servo body if within 100 mm of strong fields.
+
+
+Mounting Stack (left→right):
+Chassis plate (4 mm Al) → Servo bracket (3 mm Al or steel, powder‑coat) → M4 rivnuts → Servo → 25T horn → Lever (G10 5 mm) → Rod‑end (M3) → Shunt blade carriage (linear guide mini‑rail).
+
+Lever Geometry (suggested):
+
+Lever length 40–50 mm; shunt blade travel 8–12 mm per full stroke.
+
+Position the blade 0.5–2.0 mm clearance from ring at max brake; tune after flux mapping.
+
+
+8.2 Flywheel & Magnetic Bearings
+
+Flywheel: Dynamically balance to G 6.3 or better; include keyed hub and safety retainer.
+
+Magnetic bearings: Ensure axial restraint via secondary thrust bearing (ceramic hybrid) to capture lift.
+
+Run‑out: Target <0.03 mm TIR; shim as required.
+
+Sensors: Place Hall target on a non‑ferrous standoff, radial offset 3–5 mm from sensor face.
+
+
+8.3 Enclosure & Routing
+
+Bulkheads: Pass‑through glands (IP67) for each harness; separate AC vs DC penetrations by ≥100 mm.
+
+Cable trays: 20×40 mm internal ducts with finger slots; removable lids.
+
+Airflow: Intake baffled; keep intakes >150 mm away from magnetic dust sources; add filter.
+
+
+8.4 Fasteners & Adhesives
+
+Fasteners: 304/316 SS; thread‑locker (blue) on vibration paths.
+
+Epoxy (2‑part spray):
+
+Bond magnets to acrylic fixtures.
+
+Pot coil spools (thin coats, avoid heat soak).
+
+Seal enclosure seams; mount LED strips.
+
+
+Respect cure schedule; mask bearing journals.
+
+
+
+---
+
+9) Master OFF / Shutdown Sequence
+
+1. Toggle OFF or E‑Stop pressed.
+
+
+2. MCU asserts BRAKE_MAX output → servo to full brake (or spring returns).
+
+
+3. Latching relay coil drops → excitation/drive de‑energized.
+
+
+4. LCD shows SHUTDOWN and logs timestamp/RPM.
+
+
+5. Manual RESET required to re‑arm (fault‑tolerant).
+
+
+
+
+---
+
+10) Test & Commissioning Checklist
+
+Continuity/Polarity: Verify all harnesses; ring‑out to a netlist.
+
+Insulation: 500 V megger on AC runs (disconnect electronics).
+
+Ground bond: <0.1 Ω star point to panel grounds.
+
+RPM sensor: Validate pulse train; noise <50 mVpp at MCU input.
+
+Brake servo: Command sweep 0–100%; confirm stops, current draw, temp rise.
+
+E‑Stop: Trip test: drive drops <20 ms; servo hits brake within spec.
+
+Thermals: 30‑min run at 75% load; IR scan of bus, breakers, connectors (<30 °C over ambient preferred).
+
+
+
+---
+
+11) Netlist (Abbrev.)
+
+AC_MAIN+ → BRK_BANK_IN → BRK_120A_OUT → R1_HOT
+
+AC_MAIN− (N) → NEUTRAL_BAR → R1_NEUTRAL
+
+PE → GND_BAR → R1_GND (and all frames)
+
+12V_SRC+ → ANL50 → DC_BUS+ → SERVO_DRV+ / MCU+5V_REG / 12V_PORT+ / LATCH_COIL+
+
+12V_SRC− → DC_BUS− → STAR_GND
+
+E_STOP_LOOP: SW_ESTOP → MCU_OK → LATCH_COIL− (series)
+
+
+
+---
+
+12) Bill of Materials (Draft)
+
+Breakers: 2× 15 A (120 V); 1× 20 A (240 V); 1× 30 A DC resettable.
+
+Fuses: ANL 40–60 A + holders; branch blade fuses per loads.
+
+Relay: Latching power relay (≥40 A contacts, 12 V coil).
+
+Servo: Metal‑gear, ≥25 kg·cm; bracket + 25T horn; linear mini‑rail.
+
+Connectors: SB50/XT90, Mini‑Fit Jr, JST‑XH; ring lugs.
+
+Cable: 10/12/14/16/20/22 AWG (TXL/GXL + THHN as needed); PET + tinned copper braid.
+
+Glands/Trays: IP67 cable glands; 20×40 mm wire duct.
+
+EMI Parts: MOVs, CM chokes, ferrites, RC snubbers, TVS.
+
+Hardware: 304/316 SS fasteners; P‑clips; rivnuts M4/M6.
+
+Adhesives: 2‑part epoxy spray; thread‑locker blue.
+
+
+
+---
+
+13) Open Items & Next Deliverables
+
+Dimensioned panel drilling template (DXF/PDF).
+
+Harness drawing set with pinouts & lengths (A3 sheets).
+
+Brake lever CAD (STEP) with servo bracket and blade carriage.
+
+Wiring schematic (multi‑sheet) and single‑page overview.
+
+
+> When you green‑light, I’ll generate: (1) printable harness drawings, (2) panel DXF, and (3) overview schematic. Ready to freeze tolerances after first fit‑check.
+
+
