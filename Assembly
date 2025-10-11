@@ -1,0 +1,261 @@
+🔧 MAC 5000 Assembly Guide (Per Schematic Section)
+
+
+---
+
+A1 – Power Distribution & Protection
+
+Objective: Safely route all high-current lines (AC & DC) and install protective components before signal wiring.
+
+Components:
+
+Alternator/Inverter unit
+
+ANL 50 A main fuse + holder
+
+DC bus bar (covered, copper)
+
+AC breaker bank (2 × 15 A 120 V, 1 × 20 A 240 V)
+
+MOV surge absorbers
+
+Ground/neutral bars
+
+AC receptacles (NEMA 5-15R × 2, 6-20R × 1)
+
+
+Assembly Steps:
+
+1. Mount the Breaker Bank
+
+Left interior wall of the enclosure, vertical orientation.
+
+Torque terminals to 2.3 N·m.
+
+
+
+2. Install the ANL Fuse Holder within 150 mm of the 12 V source.
+
+
+3. Attach the DC Bus Bar on insulating standoffs; cover with clear Lexan guard.
+
+
+4. Connect 12 V Source → ANL → DC Bus using 10 AWG red wire; crimp ring lugs (AMP yellow insulated).
+
+
+5. Install MOVs: one across L–N, one L–PE, one N–PE at AC bus input.
+
+
+6. Mount Ground & Neutral Bars on aluminum chassis; scrape paint under bonding points.
+
+
+7. Wire Breakers to Outlets following color codes (black L1, red L2, white N, green PE).
+
+
+8. Label each breaker and outlet with engraved tags (“120 V R1”, “240 V R”).
+
+
+
+
+---
+
+A2 – Control Panel & Latching Relay
+
+Objective: Assemble the front-panel controls and safety interlock loop.
+
+Components:
+
+Front panel (from DXF)
+
+ON/OFF toggle switch
+
+START momentary pushbutton
+
+SERVO brake potentiometer (knob)
+
+E-STOP mushroom switch (latching)
+
+12 V RESET button
+
+LCD display module
+
+Latching relay (40 A contacts, 12 V coil)
+
+
+Assembly Steps:
+
+1. Fabricate panel from 3–4 mm Al using DXF template; deburr holes.
+
+
+2. Install switches and buttons; secure with locking nuts (hand-tight + ¼ turn).
+
+
+3. Mount LCD using M3 × 8 mm screws and nylon spacers.
+
+
+4. Wire E-STOP Loop:
+
+E-STOP → MCU_OK → LATCH coil − (series).
+
+Coil + from DC bus via fuse.
+
+
+
+5. Wire ON/OFF toggle to MCU enable (5 V logic line).
+
+
+6. Connect START momentary to MCU start input (via debounce RC network).
+
+
+7. Run shielded cable from brake knob pot to MCU ADC input.
+
+
+8. Verify switch orientation before mounting panel onto enclosure (face plate right-side up).
+
+
+9. Secure latching relay near bus bars on DIN rail; connect contact outputs to main drive/excitation feed.
+
+
+
+
+---
+
+A3 – Servo Brake Drive
+
+Objective: Install servo actuator and linkage to the magnetic brake lever.
+
+Components:
+
+Metal-gear servo (25–35 kg·cm torque)
+
+Servo bracket & mount hardware
+
+Lever arm (G10 5 mm)
+
+Linear guide rail carriage for flux-shunt blade
+
+Return spring and silicone bump stops
+
+
+Assembly Steps:
+
+1. Attach servo to bracket using M4 × 12 mm screws and thread-locker (blue).
+
+
+2. Mount bracket to chassis plate (4 mm Al); torque 2 N·m.
+
+
+3. Install 25T horn and lever arm; verify center neutral position at 90°.
+
+
+4. Connect lever to shunt blade carriage with M3 rod end and clevis pin.
+
+
+5. Set spring so that at power loss the lever returns to brake position.
+
+
+6. Route servo wiring (16 AWG twisted) through braided sleeving to servo driver.
+
+
+7. Test actuation: MCU PWM 0–100 % → lever travel 8–12 mm range.
+
+
+8. Install Mu-metal shield if within 100 mm of core magnetic field.
+
+
+
+
+---
+
+A4 – Sensor Pod & Telemetry
+
+Objective: Deploy sensors for feedback and monitoring.
+
+Components:
+
+Hall-effect RPM sensor + magnet flag
+
+NTC temp sensors (core & bearing)
+
+AC voltage/frequency isolation board
+
+Wiring harness (22 AWG shielded pairs)
+
+
+Assembly Steps:
+
+1. Mount Hall sensor 3–5 mm from flywheel target; align radially.
+
+
+2. Epoxy magnet flag onto non-ferrous flywheel surface (2-part epoxy spray).
+
+
+3. Place temp sensors with Kapton tape + thermal compound on bearing housing and core plate.
+
+
+4. Install isolation board on standoffs in sensor bay; connect AC tap leads through fused resistor divider.
+
+
+5. Run shielded cables to MCU I/O header; ground shields at MCU end only.
+
+
+6. Confirm readings: RPM pulse train clean (< 50 mVpp noise), temp sensors < 1 °C error vs reference.
+
+
+
+
+---
+
+A5 – Output Panel & Receptacles
+
+Objective: Wire and mount the load-side outputs with proper safety clearances.
+
+Components:
+
+2 × NEMA 5-15R receptacles (120 V)
+
+1 × NEMA 6-20R (240 V)
+
+Grounding bus bar
+
+Labels and faceplate hardware
+
+
+Assembly Steps:
+
+1. Cut and deburr faceplate openings; mount receptacles flush with panel.
+
+
+2. Wire 120 V outlets: 14 AWG black (L), white (N), green (PE).
+
+
+3. Wire 240 V outlet: 12 AWG black (L1), red (L2), green (PE).
+
+
+4. Install individual breakers in-line with each hot lead.
+
+
+5. Bond grounds to star ground stud (M6 serrated washer stack).
+
+
+6. Apply labels with voltage rating and breaker current.
+
+
+7. Perform continuity and polarity test before energizing.
+
+
+
+
+---
+
+Final System Checks
+
+Torque Audit: verify all screw and lug torques per spec.
+
+Continuity: ring-out each harness vs schematic netlist.
+
+Insulation Test: 500 V megger AC circuits (disconnect electronics).
+
+Ground bond: < 0.1 Ω from each panel to star ground.
+
+Functional: Power ON → Start → Brake Test → E-Stop → Reset.
