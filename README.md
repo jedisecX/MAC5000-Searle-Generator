@@ -8,7 +8,7 @@
 > POSSIBILITY MADE REAL.  
 > BUILT FOR A BOLDER FUTURE.
 
-![MAC 5000 Core Assembly – Cutaway View](images/MAC5000_Core_Assembly_Cutaway_RevB.jpg)
+*(High-resolution cutaway schematic available in `/images/MAC5000_Core_Assembly_Cutaway_RevB.jpg` — upload the optimized image from the design session)*
 
 ---
 
@@ -52,7 +52,7 @@ p\left(\frac{\partial\vec{v}}{\partial t}+\vec{v}\cdot\nabla\vec{v}\right)
 \nabla\cdot\vec{B}=0\qquad;\qquad\nabla\cdot\vec{v}=0
 ```
 
-![MHD Equations](images/MHD_Equations.jpg)
+*(Equations panel image available in `/images/MHD_Equations.jpg`)*
 
 These equations, closed with Ohm’s law \(\vec{J}=\sigma(\vec{E}+\vec{v}\times\vec{B})\) and the boundary conditions imposed by the drive coils and containment shell, fully describe the energy conversion process inside the core.
 
