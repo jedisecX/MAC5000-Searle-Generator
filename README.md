@@ -39,62 +39,48 @@ A conducting liquid metal (Galinstan) moving in a magnetic field experiences the
 \]
 
 This physics is real and has laboratory precedent.  
-Whether *this particular geometry* can deliver hundreds of kilowatts of net electrical power is an open engineering question that must be answered by a closed energy balance and first-principles calculation (see `docs/`).
+Whether *this particular geometry* can deliver hundreds of kilowatts of **net** electrical power is an open engineering question answered only by a closed energy balance.
 
-### Important Corrections from Rev. B Audit
-- Operating temperature is now a **variable experimental parameter**, not a fixed 450–650 °C claim.
-- Power and efficiency numbers are **design targets** until a full loss accounting exists.
-- Metrics such as “stability ≥ 100 %” have been replaced by measurable acceptance criteria.
+### Preliminary Design Envelope (2026-08-09)
 
-See:
-- [docs/REV_C_PLAN.md](docs/REV_C_PLAN.md) — full audit and restructuring rationale
+A first-principles parameter sweep has been completed. Key findings:
+
+- 500 kW is **not** impossible from electromagnetic power-density considerations.
+- The binding constraints are electromagnetic pressure drop, liquid-metal mass flow, and (still unquantified) magnetic-field drive power.
+- A useful operating region exists around **10 MPa** EM pressure drop → \(B \approx 0.48\) T at 50 m/s → active volume ~5.3 L → mass flow ~339 kg/s.
+- Single homogeneous toroidal volume is suboptimal; a **segmented parallel-channel** architecture is recommended.
+
+Full tables, assumptions, and the baseline geometry warning are in:
+
+→ **[docs/design-envelope.md](docs/design-envelope.md)**
+
+### Supporting Documents
+- [docs/REV_C_PLAN.md](docs/REV_C_PLAN.md) — original audit and restructuring rationale
 - [docs/energy-budget.md](docs/energy-budget.md) — required loss categories
-- [docs/mhd-model.md](docs/mhd-model.md) — calculation chain that must be closed
+- [docs/mhd-model.md](docs/mhd-model.md) — calculation chain
+- [docs/seg-hypothesis.md](docs/seg-hypothesis.md) — controlled test protocol for Module A
 
 ---
 
 ## Module A — Searle / Rotor Path
 
-Treated strictly as a **testable hypothesis**.
-
-No anomalous energy production is assumed.  
-A controlled experimental protocol is defined in [docs/seg-hypothesis.md](docs/seg-hypothesis.md).
-
-Only if calibrated measurements show net electrical output exceeding total input *under multiple control conditions* does the hypothesis advance.
-
----
-
-## Repository Structure (Rev. C Target)
-
-```
-├── README.md
-├── docs/
-│   ├── REV_C_PLAN.md
-│   ├── energy-budget.md
-│   ├── mhd-model.md
-│   ├── seg-hypothesis.md
-│   └── ...
-├── schematics/
-├── calculations/
-├── simulation/
-├── experiments/
-├── data/
-└── images/
-```
+Treated strictly as a **testable hypothesis**.  
+No anomalous energy production is assumed. See the controlled protocol in `docs/seg-hypothesis.md`.
 
 ---
 
 ## Immediate Engineering Priority
 
-Close the first-principles MHD model for the existing 1.60 m × 0.85 m geometry:
+1. **Quantify \(P_{\text{field}}\)** — design the actual coils for the 1.60 m geometry and calculate the power required to produce and sustain the target \(B\).
+2. Close the net-power equation:
 
-1. Define fluid channel cross-section
-2. Establish realistic B-field and the power required to produce it
-3. Calculate mass flow, current density, Lorentz force, and electrical extraction
-4. Sum every loss term
-5. Report the net electrical power the geometry can actually support
+\[
+P_{\text{net}} = P_{\text{electrical,out}} - (P_{\text{field}} + P_{\text{pump}} + P_{\text{coil}} + P_{\text{cooling}} + P_{\text{electronics}} + \cdots)
+\]
 
-The result of that calculation — not marketing language — will determine the next design iteration.
+3. Explore segmented channel layouts that trade pressure, flow rate, and electrode area more gracefully.
+
+Until \(P_{\text{field}}\) is known, 500 kW remains a target, not a prediction.
 
 ---
 
