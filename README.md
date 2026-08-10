@@ -47,12 +47,27 @@ A first-principles parameter sweep has been completed. Key findings:
 
 - 500 kW is **not** impossible from electromagnetic power-density considerations.
 - The binding constraints are electromagnetic pressure drop, liquid-metal mass flow, and (still unquantified) magnetic-field drive power.
-- A useful operating region exists around **10 MPa** EM pressure drop → \(B \approx 0.48\) T at 50 m/s → active volume ~5.3 L → mass flow ~339 kg/s.
+- A *preliminary* operating region exists around **~10 MPa** EM pressure drop → \(B \approx 0.48\) T at 50 m/s → active volume ~5.3 L → mass flow ~339 kg/s.
 - Single homogeneous toroidal volume is suboptimal; a **segmented parallel-channel** architecture is recommended.
 
 Full tables, assumptions, and the baseline geometry warning are in:
 
 → **[docs/design-envelope.md](docs/design-envelope.md)**
+
+### Coil / Magnetic System (in progress)
+
+The idealized ampere-turn requirement at the preliminary point is approximately:
+
+\[
+NI \approx 1.93 \times 10^6\ {\rm A\!-\!turns}
+\]
+
+Work to quantify real copper loss and true drive power has started:
+
+→ **[docs/coil-design.md](docs/coil-design.md)**  
+→ `calculations/coil-design/` (scaffold)
+
+**Important:** Until conductor cross-section, winding topology, temperature, cooling, and excitation mode are specified, \(P_{\rm field}\) remains unknown. Do not treat any current numbers as final.
 
 ### Supporting Documents
 - [docs/REV_C_PLAN.md](docs/REV_C_PLAN.md) — original audit and restructuring rationale
@@ -71,7 +86,7 @@ No anomalous energy production is assumed. See the controlled protocol in `docs/
 
 ## Immediate Engineering Priority
 
-1. **Quantify \(P_{\text{field}}\)** — design the actual coils for the 1.60 m geometry and calculate the power required to produce and sustain the target \(B\).
+1. **Quantify \(P_{\text{field}}\)** — finish the coil model with real conductor, thermal, and excitation inputs.
 2. Close the net-power equation:
 
 \[
