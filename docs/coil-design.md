@@ -1,6 +1,6 @@
 # Coil / Magnetic System Design — MAC 5000 Rev. C
 
-**Status:** Transparent calculator is live. Numerical results are still preliminary and assumption-driven.
+**Status:** Transparent calculator is live and corrected. Numerical results remain preliminary and assumption-driven.
 
 ## Purpose
 
@@ -33,17 +33,31 @@ NI = \frac{B \cdot 2\pi r}{\mu_0} \approx 1.93 \times 10^6\ {\rm A\!-\!turns}
 
 These are **not** fabrication recommendations.
 
-## Critical insight from the first copper-loss study
+## Critical modeling correction
 
-A constant-current-density sweep produced ~3.19 MW of copper loss for the required ampere-turns — more than six times the 500 kW target. That result is correct and useful: it shows that raw ampere-turns are expensive in copper.
+**Packing / fill factor must not be applied to the conductor cross-section when calculating current density.**
 
-**Parallel paths alone do not reduce copper loss** if total copper volume and current density are held equivalent. They only redistribute the current. Topology, packing factor, temperature, and cooling capacity must be optimized together.
+Correct physics:
+
+\[
+J = \frac{I_{\rm path}}{A_{\rm Cu}}
+\]
+
+Packing factor belongs only in the winding-window constraint:
+
+\[
+A_{\rm window} \ge \frac{N \, A_{\rm Cu}}{k_{\rm fill}}
+\]
+
+The previous version incorrectly reduced the effective copper area for \(J\). That has been fixed.
 
 ## Three distinct quantities that must not be conflated
 
 1. **Ampere-turn requirement** \(NI\) — sets the field.
-2. **Copper loss** \(P_{\rm Cu} = I^2 R\) — depends on conductor cross-section, mean turn length, temperature, and parallelization.
-3. **Magnetic-field drive power** \(P_{\rm field}\) — for steady DC is primarily the copper + core losses; for any AC/ramped/pulsed excitation additional reactive, switching, and core-loss terms appear.
+2. **Copper loss** \(P_{\rm Cu} = I^2 R\) — depends on physical conductor area, length, temperature, and parallelization.
+3. **Magnetic-field drive power** \(P_{\rm field}\) — for steady DC is primarily copper + core losses; for AC/ramped excitation additional terms appear.
+
+\(k_{\rm core}\) is exposed only as a first-order sensitivity parameter. It is **not** a real magnetic-circuit model (geometry, reluctance, permeability, saturation, and leakage are still missing).
 
 ## Live calculator
 
@@ -51,31 +65,30 @@ A constant-current-density sweep produced ~3.19 MW of copper loss for the requir
 calculations/coil-design/toroidal_field.py
 ```
 
-Transparent first-order model. Inputs:
-
-- \(B\), mean radius, turns, copper area, parallel paths
-- copper temperature, packing factor, core factor
-
-Outputs:
-
-- required \(NI\), currents, current density, resistance, copper loss, copper volume
-
-Every number is driven by explicit assumptions. Run it and change the inputs; the losses change accordingly.
+Transparent first-order model with the corrected current-density / packing-factor separation.
 
 ## Next calculation
 
 Build `coil_sweep.py` over the joint space:
 
 \[
-(N,\; P,\; A_{Cu},\; J,\; T,\; B,\; r,\; k_{core})
+(N,\; P,\; A_{Cu},\; J,\; T,\; B,\; r,\; k_{core},\; k_{fill})
 \]
 
-Then couple the resulting \(P_{\rm Cu}\) (and eventual \(P_{\rm field}\)) back to the MHD design envelope.
+Reject configurations that violate:
+
+- chosen current-density limit
+- cooling capacity
+- winding-window fit
+- conductor current limit
+- unreasonable copper volume
+
+Then rank surviving designs by copper loss (and later by full \(P_{\rm field}\)).
 
 ## Required before any firm claims
 
 - Conductor type and realistic cross-section
 - Winding topology and packing factor
 - Operating temperature and cooling method
-- Core / yoke decision
+- Core / yoke decision (real magnetic circuit, not just \(k_{\rm core}\))
 - Excitation mode (steady DC vs pulsed/AC)
